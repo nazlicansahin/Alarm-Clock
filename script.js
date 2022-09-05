@@ -2,6 +2,9 @@ const currentTime = document.querySelector("h1"),
   content = document.querySelector(".content");
 const selectMenu = document.querySelectorAll("select"),
   setAlarmBtn = document.querySelector("button");
+let alarmTime,
+  isAlarmSet = false;
+ringtone = new Audio("./files/ringtone.mp3");
 
 for (let i = 12; i > 0; i--) {
   i = i < 10 ? "0" + i : i;
@@ -40,3 +43,26 @@ setInterval(() => {
     ringtone.loop = true;
   }
 });
+function setAlarm() {
+  if (isAlarmSet) {
+    alarmTime = "";
+    ringtone.pause();
+    content.classList.remove("disable");
+    setAlarmBtn.innerText = "Set Alarm";
+    return (isAlarmSet = false);
+  }
+  let time = `${selectMenu[0].value}:${selectMenu[1].value} ${selectMenu[2].value}`;
+  if (
+    time.includes("Hour") ||
+    time.includes("Minute") ||
+    time.includes("AM/PM")
+  ) {
+    return alert("Please fill whole blanks");
+  }
+  isAlarmSet = true;
+  alarmTime = time;
+  content.classList.add("disable");
+  setAlarmBtn.innerText = "Clear Alarm";
+}
+
+setAlarmBtn.addEventListener("click", setAlarm);
